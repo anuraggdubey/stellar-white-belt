@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oops happened. This helps.</title>
+  <link rel="icon" href="data:," />
+
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Story-Driven Styles -->
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- HERO STATE (Before Connection) -->
+    <div class="hero-state" id="heroState">
+      <div class="hero-section">
+        <h1 class="hero-headline">Oops happened.<br>This helps.</h1>
+        <p class="hero-subtext">
+          A simple way to send a small payment with a message.<br>
+          Make things right. Move on. No awkward follow-ups.
+        </p>
+        <button class="primary-button" id="connectBtn">Fix it now</button>
+      </div>
+
+      <div class="info-panel">
+        <h2 class="panel-title">How this works (no drama)</h2>
+        <ol class="steps-list">
+          <li>Connect your wallet.</li>
+          <li>Choose who you owe.</li>
+          <li>Add a small amount and a note.</li>
+          <li>Send it. That's it.</li>
+        </ol>
+
+        <div class="example-box">
+          <p class="example-label">For example:</p>
+          <p class="example-message">"Sorry I disappeared after dinner — here's my share."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTION STATE (After Connection) -->
+    <div class="action-state hidden" id="actionState">
+      <div class="action-section">
+        <h1 class="action-headline">Let's make it right</h1>
+
+        <!-- Tab Navigation -->
+        <div class="feature-tabs">
+          <button class="tab-btn active" data-tab="payment" id="tab-payment">Single Payment</button>
+          <button class="tab-btn" data-tab="split" id="tab-split">Split Bill</button>
+          <button class="tab-btn" data-tab="history" id="tab-history">History</button>
+        </div>
+
+        <!-- Balance Warning (Global) -->
+        <div id="balance-warning" class="hidden"></div>
+
+        <!-- PAYMENT TAB (Existing Form - UNCHANGED) -->
+        <div class="tab-content" id="payment-content">
+          <div class="wallet-info-compact">
+            <span class="wallet-label">Connected:</span>
+            <span class="wallet-address-short" id="walletAddressShort">—</span>
+            <span class="wallet-balance" id="balanceDisplay">0 XLM</span>
+          </div>
+
+          <div class="question-group">
+            <label class="question-label">Who is this for?</label>
+            <input id="receiver" type="text" class="question-input" placeholder="Paste their Stellar address here" />
+          </div>
+
+          <div class="question-group">
+            <label class="question-label">How much do you owe?</label>
+            <input id="amount" type="number" step="0.0000001" class="question-input" placeholder="5" />
+          </div>
+
+          <div class="question-group message-group">
+            <label class="question-label">Want to say something? <span class="subtle-hint">(This is the best
+                part)</span></label>
+            <textarea id="message" class="message-input"
+              placeholder="Sorry I disappeared after dinner — here's my share." maxlength="28" rows="3"></textarea>
+            <div class="character-count">
+              <span id="charCount">0</span> / 28
+            </div>
+          </div>
+
+          <button class="primary-button" id="sendBtn">Send it. Done.</button>
+
+          <div id="transactionResult"></div>
+
+          <button class="text-button" id="disconnectBtn">Disconnect and start over</button>
+        </div>
+
+        <!-- SPLIT TAB (New Feature) -->
+        <div class="tab-content hidden" id="split-content">
+          <div class="wallet-info-compact">
+            <span class="wallet-label">Connected:</span>
+            <span class="wallet-address-short" id="walletAddressShortSplit">—</span>
+            <span class="wallet-balance" id="balanceDisplaySplit">0 XLM</span>
+          </div>
+
+          <div class="question-group">
+            <label class="question-label">What's the total bill?</label>
+            <input id="split-total" type="number" step="0.0000001" class="question-input" placeholder="100" />
+          </div>
+
+          <div class="question-group">
+            <label class="question-label">Who's sharing this? <span class="subtle-hint">(One address per
+                line)</span></label>
+            <textarea id="split-recipients" class="question-input" rows="5"
+              placeholder="GABC...&#10;GDEF...&#10;GHIJ..."></textarea>
+            <div class="character-count" id="split-recipient-count">0 recipients</div>
+          </div>
+
+          <div class="question-group">
+            <label class="question-label">Add a note? <span class="subtle-hint">(Optional)</span></label>
+            <input id="split-memo" type="text" class="question-input" maxlength="28" placeholder="Pizza night" />
+          </div>
+
+          <button class="primary-button" id="previewSplitBtn">Preview Split</button>
+
+          <!-- Split Preview -->
+          <div id="split-preview" class="hidden"></div>
+
+          <!-- Split Progress -->
+          <div id="split-progress" class="hidden"></div>
+
+          <!-- Split Results -->
+          <div id="split-results" class="hidden"></div>
+
+          <button class="text-button" id="clearSplitBtn">Clear and start over</button>
+        </div>
+
+        <!-- HISTORY TAB (New Feature) -->
+        <div class="tab-content hidden" id="history-content">
+          <!-- History will be dynamically rendered here -->
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <h2 class="panel-title">How this works (no drama)</h2>
+        <ol class="steps-list">
+          <li>Connect your wallet.</li>
+          <li>Choose who you owe.</li>
+          <li>Add a small amount and a note.</li>
+          <li>Send it. That's it.</li>
+        </ol>
+
+        <div class="example-box">
+          <p class="example-label">Example messages:</p>
+          <p class="example-message">"For the coffee. And my lateness."</p>
+          <p class="example-message">"Here's that $20 from October. Finally."</p>
+          <p class="example-message">"Splitting the Uber from last week 🚗"</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VITE ENTRY -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
