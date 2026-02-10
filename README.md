@@ -56,3 +56,5 @@ This is a Testnet-only application
 Requires the Freighter wallet
 All transactions require explicit user approval
 No secret keys are ever stored or handled by the app
+
+deployed at : https://stellar-white-belt.vercel.app/
